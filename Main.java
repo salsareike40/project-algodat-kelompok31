@@ -1,70 +1,29 @@
-public class Main{
-    static EdgeList edges1;
-    static EdgeList edges2;
-    static EdgeList edges3;
+public class Main {
+        public static void main(String[] args) {
+            LinkedList daftarFilmBioskop = new LinkedList();
 
-    static {
-        edges1 = new EdgeList();
-        edges1.add("Theta", "Kappa", 3);
-        edges1.add("Theta", "Iota", 4);
-        edges1.add("Theta", "Mu", 4);
-        edges1.add("Theta", "Epsilon", 5);
-        edges1.add("Theta", "Delta", 7);
-        edges1.add("Delta", "Eta", 2);
-        edges1.add("Delta", "Beta", 3);
-        edges1.add("Kappa", "Nu", 7);
-        edges1.add("Mu", "Lambda", 8);
-        edges1.add("Mu", "Omnicron", 8);
-        edges1.add("Epsilon", "Zeta", 8);
-        edges1.add("Mu", "Xi", 10);
-        edges1.add("Delta", "Alpha", 9);
-        edges1.add("Delta", "Gamma", 17);
-        edges1.add("Nu", "Omega", 9);
-        edges1.add("Beta", "Gamma", 7);
-        edges1.add("Xi", "Sigma", 5);
+            // Menambahkan data film dan bioskop
+            daftarFilmBioskop.tambahFilm("Wicked", 160, "XXI");
+            daftarFilmBioskop.tambahFilm("Moana 2", 100, "CGV");
+            daftarFilmBioskop.tambahFilm("Mufasa: The Lion King", 118, "XXI");
+            daftarFilmBioskop.tambahFilm("Habibie & Ainun", 125, "Cinepolis");
+            daftarFilmBioskop.tambahFilm("Hutang Nyawa", 100, "CGV");
+            daftarFilmBioskop.tambahFilm("Avangers: Endgame", 181, "Cinepolis");
+            daftarFilmBioskop.tambahFilm("The Garfield Movie", 101, "XXI");
 
-        edges2 = new EdgeList();
-        edges2.add("Alpha", "Beta", 8);
-        edges2.add("Alpha", "Delta", 9);
-        edges2.add("Alpha", "Eta", 10);
-        edges2.add("Delta", "Epsilon", 4);
-        edges2.add("Beta", "Gamma", 7);
-        edges2.add("Delta", "Theta", 7);
-        edges2.add("Eta", "Lambda", 9);
-        edges2.add("Theta", "Kappa", 3);
-        edges2.add("Theta", "Iota", 4);
-        edges2.add("Theta", "Mu", 4);
-        edges2.add("Epsilon", "Zeta", 9);
-        edges2.add("Kappa", "Nu", 7);
-        edges2.add("Lambda", "Xi", 7);
-        edges2.add("Mu", "Omnicron", 8);
-        edges2.add("Xi", "Sigma", 5);
-        edges2.add("Nu", "Omega", 9);
+            // Menampilkan daftar film dan bioskop
+            daftarFilmBioskop.tampilkanFilm();
 
-        edges3 = new EdgeList();
-        edges3.add("Mu", "Theta", 4);
-        edges3.add("Theta", "Kappa", 3);
-        edges3.add("Theta", "Iota", 4);
-        edges3.add("Mu", "Lambda", 8);
-        edges3.add("Mu", "Omnicron", 8);
-        edges3.add("Theta", "Epsilon", 5);
-        edges3.add("Mu", "Xi", 10);
-        edges3.add("Theta", "Delta", 7);
-        edges3.add("Beta", "Gamma", 7);
-        edges3.add("Omnicron", "Nu", 3);
-        edges3.add("Delta", "Eta", 2);
-        edges3.add("Delta", "Beta", 3);
-        edges3.add("Xi", "Sigma", 5);
-        edges3.add("Epsilon", "Zeta", 9);
-        edges3.add("Omnicron", "Omega", 10);
-        edges3.add("Alpha", "Delta", 9);
-    }
+           // Mencari film dengan binary search
+           BinarySearch binarySearch = new BinarySearch(7);
+           binarySearch.addFilm("Wicked", 160);
+           binarySearch.addFilm("Moana 2", 100);
+           binarySearch.addFilm("Mufasa: The Lion King", 118);
+           binarySearch.addFilm("Habibie & Ainun", 125);
+           binarySearch.addFilm("Hutang Nyawa", 100);
+           binarySearch.addFilm("Avangers: Endgame", 181);
+           binarySearch.addFilm("The Garfield Movie", 101);
 
-    public static void main(String[] args) {
-        ShortestPath.findShortestPaths("Theta", edges1);
-        System.out.println();
-        ShortestPath.findShortestPaths("Alpha", edges2);
-        System.out.println();
-        ShortestPath.findShortestPaths("Mu", edges3);
-    }
+
+        }
 }
