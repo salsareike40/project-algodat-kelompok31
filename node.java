@@ -1,10 +1,10 @@
-public class Node {
+public class node {
     String namaFilm;
     int durasi;
     String namaBioskop;
-    Node next;
+    node next;
 
-    Node(String namaFilm, int durasi, String namaBioskop) {
+    node(String namaFilm, int durasi, String namaBioskop) {
         this.namaFilm = namaFilm;
         this.durasi = durasi;
         this.namaBioskop = namaBioskop;
