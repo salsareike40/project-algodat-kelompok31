@@ -1,129 +1,202 @@
-public class graph {
-    static class Edge {
-        String destination;
-        int weight;
-        Edge next;
+import java.util.Scanner;
 
-        Edge(String destination, int weight) {
-            this.destination = destination;
+class Graph {
+    class Node {
+        String vertex;
+        int weight;
+        Node next;
+
+        Node(String vertex, int weight) {
+            this.vertex = vertex;
             this.weight = weight;
             this.next = null;
         }
     }
 
-    static class Vertex {
-        String name;
-        Edge edges;
-        boolean visited;
-        int distance;
-        Vertex next;
+    class LinkedList {
+        Node head;
 
-        Vertex(String name) {
-            this.name = name;
-            this.edges = null;
-            this.visited = false;
-            this.distance = Integer.MAX_VALUE;
-            this.next = null;
-        }
-    }
-
-    static class Graph {
-        Vertex vertices;
-        void addVertex(String name) {
-            Vertex newVertex = new Vertex(name);
-            if (vertices == null) {
-                vertices = newVertex;
+        void add(String vertex, int weight) {
+            Node newNode = new Node(vertex, weight);
+            if (head == null) {
+                head = newNode;
             } else {
-                Vertex temp = vertices;
+                Node temp = head;
                 while (temp.next != null) {
                     temp = temp.next;
                 }
-                temp.next = newVertex;
+                temp.next = newNode;
             }
         }
 
-        void addEdge(String source, String destination, int weight) {
-            Vertex src = findVertex(source);
-            if (src != null) {
-                Edge newEdge = new Edge(destination, weight);
-                if (src.edges == null) {
-                    src.edges = newEdge;
-                } else {
-                    Edge temp = src.edges;
-                    while (temp.next != null) {
-                        temp = temp.next;
-                    }
-                    temp.next = newEdge;
-                }
-            }
+        Node getHead() {
+            return head;
         }
+    }
 
-        Vertex findVertex(String name) {
-            Vertex temp = vertices;
-            while (temp != null) {
-                if (temp.name.equals(name)) {
-                    return temp;
-                }
+    class Vertex {
+        String name;
+        int distance;
+        boolean visited;
+        String previous;
+        Vertex next;
+        LinkedList neighbors;
+
+        Vertex(String name) {
+            this.name = name;
+            this.distance = Integer.MAX_VALUE;
+            this.visited = false;
+            this.previous = null;
+            this.next = null;
+            this.neighbors = new LinkedList();
+        }
+    }
+
+    Vertex vertexListHead;
+
+    Graph() {
+        vertexListHead = null;
+    }
+
+    void addVertex(String name) {
+        Vertex newVertex = new Vertex(name);
+        if (vertexListHead == null) {
+            vertexListHead = newVertex;
+        } else {
+            Vertex temp = vertexListHead;
+            while (temp.next != null) {
                 temp = temp.next;
             }
-            return null;
+            temp.next = newVertex;
+        }
+    }
+
+    void addEdge(String src, String dest, int weight) {
+        Vertex srcVertex = getVertex(src);
+        if (srcVertex != null) {
+            srcVertex.neighbors.add(dest, weight);
+        }
+    }
+
+    Vertex getVertex(String name) {
+        Vertex temp = vertexListHead;
+        while (temp != null) {
+            if (temp.name.equals(name)) {
+                return temp;
+            }
+            temp = temp.next;
+        }
+        return null;
+    }
+
+    Vertex findMinVertex() {
+        Vertex minVertex = null;
+        int minDistance = Integer.MAX_VALUE;
+
+        Vertex temp = vertexListHead;
+        while (temp != null) {
+            if (!temp.visited && temp.distance < minDistance) {
+                minDistance = temp.distance;
+                minVertex = temp;
+            }
+            temp = temp.next;
         }
 
-        void dijkstra(String start) {
-            Vertex startVertex = findVertex(start);
-            if (startVertex == null) return;
+        return minVertex;
+    }
 
-            startVertex.distance = 0;
-            while (true) {
-                Vertex current = findClosestUnvisited();
-                if (current == null) break;
+    void dijkstra(String start) {
+        Vertex startVertex = getVertex(start);
+        startVertex.distance = 0;
 
-                current.visited = true;
-                Edge edge = current.edges;
-                while (edge != null) {
-                    Vertex neighbor = findVertex(edge.destination);
-                    if (!neighbor.visited) {
-                        int newDistance = current.distance + edge.weight;
-                        if (newDistance < neighbor.distance) {
-                            neighbor.distance = newDistance;
-                        }
+        while (true) {
+            Vertex current = findMinVertex();
+            if (current == null) {
+                break;
+            }
+
+            current.visited = true;
+
+            Node neighborNode = current.neighbors.getHead();
+            while (neighborNode != null) {
+                Vertex neighbor = getVertex(neighborNode.vertex);
+                if (neighbor != null && !neighbor.visited) {
+                    int newDist = current.distance + neighborNode.weight;
+                    if (newDist < neighbor.distance) {
+                        neighbor.distance = newDist;
+                        neighbor.previous = current.name;
                     }
-                    edge = edge.next;
                 }
+                neighborNode = neighborNode.next;
             }
         }
 
-        Vertex findClosestUnvisited() {
-            Vertex temp = vertices;
-            Vertex closest = null;
+        printResults(start);
+    }
+
+    void printResults(String start) {
+        System.out.println("Vertex  \tDistance from " + start + "\t\tPrevious");
+
+        Vertex resultListHead = null;
+        Vertex temp = vertexListHead;
+        while (temp != null) {
+            Vertex newVertex = new Vertex(temp.name);
+            newVertex.distance = temp.distance;
+            newVertex.previous = temp.previous;
+            newVertex.visited = temp.visited;
+            newVertex.neighbors = temp.neighbors;
+
+            if (resultListHead == null) {
+                resultListHead = newVertex;
+            } else {
+                Vertex last = resultListHead;
+                while (last.next != null) {
+                    last = last.next;
+                }
+                last.next = newVertex;
+            }
+            temp = temp.next;
+        }
+
+        while (resultListHead != null) {
+            Vertex minVertex = null;
+            Vertex minPrev = null;
             int minDistance = Integer.MAX_VALUE;
 
-            while (temp != null) {
-                if (!temp.visited && temp.distance < minDistance) {
-                    minDistance = temp.distance;
-                    closest = temp;
+            Vertex current = resultListHead;
+            Vertex prev = null;
+            while (current != null) {
+                if (current.distance < minDistance) {
+                    minDistance = current.distance;
+                    minVertex = current;
+                    minPrev = prev;
                 }
-                temp = temp.next;
+                prev = current;
+                current = current.next;
             }
-            return closest;
-        }
 
-        //belum urut, nanti deh. bagian bioskop f nya masih cacat
-        void printDistances(String start) {
-            System.out.println("Jarak dari " + start + ":");
-            Vertex temp = vertices;
-            while (temp != null) {
-                System.out.println("Ke " + temp.name + ": " + (temp.distance == Integer.MAX_VALUE ? "unreach" : temp.distance));
-                temp = temp.next;
+            if (minVertex != null) {
+                System.out.println(
+                    minVertex.name + "  \t" +
+                    (minVertex.distance == Integer.MAX_VALUE ? "Infinity" : minVertex.distance) + "Km" + "\t\t\t\t" +
+                    (minVertex.previous != null ? minVertex.previous : "None")
+                );
+
+                if (minPrev == null) { 
+                    resultListHead = minVertex.next;
+                } else {
+                    minPrev.next = minVertex.next;
+                }
             }
         }
     }
 
     public static void main(String[] args) {
         Graph graph = new Graph();
+
         graph.addVertex("rumah1");
-        graph.addVertex("bioskopA");
         graph.addVertex("bioskopB");
+        graph.addVertex("bioskopA");
         graph.addVertex("bioskopC");
         graph.addVertex("bioskopD");
         graph.addVertex("bioskopE");
@@ -136,14 +209,24 @@ public class graph {
         graph.addEdge("bioskopB", "bioskopA", 9);
         graph.addEdge("bioskopB", "bioskopC", 12);
         graph.addEdge("bioskopA", "rumah3", 5);
-        graph.addEdge("bioskopC", "bioskopA", 7);
         graph.addEdge("bioskopC", "bioskopD", 6);
-        graph.addEdge("bioskopD", "rumah2", 11);
-        graph.addEdge("bioskopF", "bioskopC", 9);
-        graph.addEdge("bioskopF", "bioskopE", 15);
+        graph.addEdge("bioskopE", "bioskopF", 15);
         graph.addEdge("bioskopF", "rumah2", 11);
 
-        graph.dijkstra("rumah1");
-        graph.printDistances("rumah1");
+        Scanner scanner = new Scanner(System.in);
+        String startVertex;
+
+        while (true) {
+            System.out.print("Pilih simpul awal (rumah1, rumah2, rumah3): ");
+            startVertex = scanner.nextLine().trim();
+
+            if (startVertex.equals("rumah1") || startVertex.equals("rumah2") || startVertex.equals("rumah3")) {
+                break;
+            } else {
+                System.out.println("Input tidak valid. Silakan pilih antara rumah1, rumah2, atau rumah3.");
+            }
+        }
+
+        graph.dijkstra(startVertex);
     }
 }
