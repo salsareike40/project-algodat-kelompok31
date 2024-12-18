@@ -4,7 +4,6 @@ class Node {
     int durasi;
     String namaBioskop;
     Node next;
-
     Node(String namaFilm, int durasi, String namaBioskop) {
         this.namaFilm = namaFilm;
         this.durasi = durasi;
@@ -12,11 +11,9 @@ class Node {
         this.next = null;
     }
 }
-
 class FilmQueue {
     Node head, tail;
 
-    // Menambahkan film ke antrian
     void tambahFilm(String namaFilm, int durasi, String namaBioskop) {
         Node baru = new Node(namaFilm, durasi, namaBioskop);
         if (head == null) {
@@ -26,7 +23,6 @@ class FilmQueue {
             tail = baru;
         }
     }
-
     Node hapusFilm() {
         if (head == null) {
             return null;
@@ -38,7 +34,6 @@ class FilmQueue {
         }
         return temp;
     }
-
     void tampilkanFilm(String kategori) {
         if (head == null) {
             System.out.println("Tidak ada film dalam daftar " + kategori);
@@ -53,7 +48,6 @@ class FilmQueue {
         }
     }
 }
-
 class FilmStack {
     private static class StackNode {
         Node film;
@@ -66,14 +60,12 @@ class FilmStack {
 
     private StackNode top;
 
-    // Menambahkan film ke stack
     void push(Node film) {
         StackNode baru = new StackNode(film);
         baru.next = top;
         top = baru;
     }
 
-    // Menghapus film dari stack (LIFO)
     Node pop() {
         if (top == null) {
             return null;
@@ -83,12 +75,10 @@ class FilmStack {
         return film;
     }
 
-    // Memeriksa apakah stack kosong
     boolean isEmpty() {
         return top == null;
     }
 
-    // Menampilkan riwayat film
     void tampilkanRiwayat() {
         if (isEmpty()) {
             System.out.println("Belum ada riwayat film yang selesai tayang.");
@@ -110,29 +100,22 @@ public class BioskopProgram {
         FilmQueue daftarFilmBioskop = new FilmQueue();
         FilmQueue filmBakalTayang = new FilmQueue();
         FilmStack riwayatFilm = new FilmStack();
-
-        // Menambahkan data film ke antrian film yang sedang tayang
-        daftarFilmBioskop.tambahFilm("Wicked", 160, "XXI");
-        daftarFilmBioskop.tambahFilm("Moana 2", 100, "CGV");
-        daftarFilmBioskop.tambahFilm("Mufasa: The Lion King", 118, "XXI");
-        daftarFilmBioskop.tambahFilm("Habibie & Ainun", 125, "Cinepolis");
-        daftarFilmBioskop.tambahFilm("Hutang Nyawa", 100, "CGV");
-        daftarFilmBioskop.tambahFilm("Avengers: Endgame", 181, "Cinepolis");
-        daftarFilmBioskop.tambahFilm("The Garfield Movie", 101, "XXI");
-
-        // Menambahkan data film ke antrian film bakal tayang
-        filmBakalTayang.tambahFilm  ("Moana 2", 100, "CGV");
-        filmBakalTayang.tambahFilm ("Wicked", 160, "XXI");
-        filmBakalTayang.tambahFilm("Mufasa: The Lion King", 118, "XXI");
-        filmBakalTayang.tambahFilm ("Habibie & Ainun", 125, "Cinepolis");
-        filmBakalTayang.tambahFilm ("Hutang Nyawa", 100, "CGV");
-        filmBakalTayang.tambahFilm ("Avengers: Endgame", 181, "Cinepolis");
-        filmBakalTayang.tambahFilm ("The Garfield Movie", 101, "XXI");
-
-
+        daftarFilmBioskop.tambahFilm("Wicked (2024)", 160, "XXI");
+        daftarFilmBioskop.tambahFilm("Moana 2 (2024)", 100, "CGV");
+        daftarFilmBioskop.tambahFilm("Mufasa: The Lion King (2024)", 118, "XXI");
+        daftarFilmBioskop.tambahFilm("Habibie & Ainun (2012)", 125, "Cinepolis");
+        daftarFilmBioskop.tambahFilm("Hutang Nyawa (2024)", 100, "CGV");
+        daftarFilmBioskop.tambahFilm("Avengers: Endgame (2019)", 181, "Cinepolis");
+        daftarFilmBioskop.tambahFilm("The Garfield Movie (2024)", 101, "XXI");
+        filmBakalTayang.tambahFilm  ("Moana 2 (2024)", 100, "CGV");
+        filmBakalTayang.tambahFilm ("Wicked (2024)", 160, "XXI");
+        filmBakalTayang.tambahFilm("Mufasa: The Lion King (2024)", 118, "XXI");
+        filmBakalTayang.tambahFilm ("Habibie & Ainun (2012)", 125, "Cinepolis");
+        filmBakalTayang.tambahFilm ("Hutang Nyawa (2024)", 100, "CGV");
+        filmBakalTayang.tambahFilm ("Avengers: Endgame (2019)", 181, "Cinepolis");
+        filmBakalTayang.tambahFilm ("The Garfield Movie (2024)", 101, "XXI");
         Scanner scanner = new Scanner(System.in);
         int pilihan;
-
         do {
             System.out.println("\t   *==============================*");
             System.out.println("\t   ||   Program Tiket CinePath   ||");
@@ -141,7 +124,7 @@ public class BioskopProgram {
             System.out.println(" ====================================================");
             System.out.println("\t   DAFTAR MENU ");
             System.out.println("\t*-------------------------------*");
-            System.out.println("\t| 1. Pembelian Tiket            |");
+            System.out.println("\t| 1. Daftar Film            |");
             System.out.println("\t| 2. Daftar Film Bakal Tayang   |");
             System.out.println("\t| 3. Riwayat Film               |");
             System.out.println("\t| 4. Keluar                     |");
@@ -149,22 +132,16 @@ public class BioskopProgram {
             System.out.println(" ====================================================");
             System.out.println();
             System.out.print(" Masukan Pilihan Anda (1-4) : ");
-
-            // Validasi input untuk pilihan menu
             while (!scanner.hasNextInt()) {
                 System.out.println("Input harus berupa angka. Silakan coba lagi.");
                 System.out.print(" Masukan Pilihan Anda (1-4) : ");
                 scanner.next();
             }
-
             pilihan = scanner.nextInt();
             System.out.println();
-
             switch (pilihan) {
                 case 1: {
                     daftarFilmBioskop.tampilkanFilm("yang Sedang Tayang");
-                   
-                  
                     break;
                 }
                 case 2: {
@@ -184,7 +161,7 @@ public class BioskopProgram {
                     break;
                 }
                 case 4:
-                    System.out.println("Keluar dari program. Terima kasih!");
+                    System.out.println("Keluar dari program. Terima kasih dan Sampai Jumpa Lagi");
                     break;
                 default:
                     System.out.println("Pilihan tidak valid. Silakan coba lagi.");
