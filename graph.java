@@ -1,7 +1,5 @@
-import java.util.Scanner;
-
-class Graph {
-    class Node {
+public class Graph {
+    public class Node {
         String vertex;
         int weight;
         Node next;
@@ -12,10 +10,8 @@ class Graph {
             this.next = null;
         }
     }
-
-    class LinkedList {
+    class vertexList {
         Node head;
-
         void add(String vertex, int weight) {
             Node newNode = new Node(vertex, weight);
             if (head == null) {
@@ -28,7 +24,6 @@ class Graph {
                 temp.next = newNode;
             }
         }
-
         Node getHead() {
             return head;
         }
@@ -40,7 +35,7 @@ class Graph {
         boolean visited;
         String previous;
         Vertex next;
-        LinkedList neighbors;
+        vertexList neighbors;
 
         Vertex(String name) {
             this.name = name;
@@ -48,7 +43,7 @@ class Graph {
             this.visited = false;
             this.previous = null;
             this.next = null;
-            this.neighbors = new LinkedList();
+            this.neighbors = new vertexList();
         }
     }
 
@@ -92,7 +87,6 @@ class Graph {
     Vertex findMinVertex() {
         Vertex minVertex = null;
         int minDistance = Integer.MAX_VALUE;
-
         Vertex temp = vertexListHead;
         while (temp != null) {
             if (!temp.visited && temp.distance < minDistance) {
@@ -101,22 +95,18 @@ class Graph {
             }
             temp = temp.next;
         }
-
         return minVertex;
     }
 
     void dijkstra(String start) {
         Vertex startVertex = getVertex(start);
         startVertex.distance = 0;
-
         while (true) {
             Vertex current = findMinVertex();
             if (current == null) {
                 break;
             }
-
             current.visited = true;
-
             Node neighborNode = current.neighbors.getHead();
             while (neighborNode != null) {
                 Vertex neighbor = getVertex(neighborNode.vertex);
@@ -130,13 +120,11 @@ class Graph {
                 neighborNode = neighborNode.next;
             }
         }
-
         printResults(start);
     }
 
     void printResults(String start) {
         System.out.println("Vertex  \tDistance from " + start + "\t\tPrevious");
-
         Vertex resultListHead = null;
         Vertex temp = vertexListHead;
         while (temp != null) {
@@ -189,44 +177,5 @@ class Graph {
                 }
             }
         }
-    }
-
-    public static void main(String[] args) {
-        Graph graph = new Graph();
-
-        graph.addVertex("rumah1");
-        graph.addVertex("bioskopB");
-        graph.addVertex("bioskopA");
-        graph.addVertex("bioskopC");
-        graph.addVertex("bioskopD");
-        graph.addVertex("bioskopE");
-        graph.addVertex("bioskopF");
-        graph.addVertex("rumah2");
-        graph.addVertex("rumah3");
-
-        graph.addEdge("rumah1", "bioskopB", 12);
-        graph.addEdge("rumah1", "bioskopE", 9);
-        graph.addEdge("bioskopB", "bioskopA", 9);
-        graph.addEdge("bioskopB", "bioskopC", 12);
-        graph.addEdge("bioskopA", "rumah3", 5);
-        graph.addEdge("bioskopC", "bioskopD", 6);
-        graph.addEdge("bioskopE", "bioskopF", 15);
-        graph.addEdge("bioskopF", "rumah2", 11);
-
-        Scanner scanner = new Scanner(System.in);
-        String startVertex;
-
-        while (true) {
-            System.out.print("Pilih simpul awal (rumah1, rumah2, rumah3): ");
-            startVertex = scanner.nextLine().trim();
-
-            if (startVertex.equals("rumah1") || startVertex.equals("rumah2") || startVertex.equals("rumah3")) {
-                break;
-            } else {
-                System.out.println("Input tidak valid. Silakan pilih antara rumah1, rumah2, atau rumah3.");
-            }
-        }
-
-        graph.dijkstra(startVertex);
     }
 }
